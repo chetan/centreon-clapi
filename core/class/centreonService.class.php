@@ -589,7 +589,7 @@ class CentreonService {
 						" WHERE s.service_description = '".$svc_desc."' LIMIT 1";
 			*/
 			$request =  " SELECT " .
-					    " service_id, service_description, service_alias, s.command_command_id, ".
+					    " service_id, service_description, service_alias, s.service_template_model_stm_id, s.command_command_id, ".
 					    " s.timeperiod_tp_id, service_max_check_attempts, service_normal_check_interval, " .
 						" service_retry_check_interval,service_active_checks_enabled, service_passive_checks_enabled, " .
 						" s.command_command_id_arg, host_id, host_name " .
@@ -603,13 +603,13 @@ class CentreonService {
 			$i = 0;
 			while ($data = $DBRESULT->fetchRow()) {
 				if ($i == 0) {
-					print "hostid;svcid;host;description;command;args;checkPeriod;maxAttempts;checkInterval;retryInterval;active;passive\n";
+					print "hostid;svcid;host;description;svcTemplateId;command;args;checkPeriod;maxAttempts;checkInterval;retryInterval;active;passive\n";
 				}
 				if (!isset($data["command_name"])) {
 					$data["command_name"] = "";
 				}
 				$i++;
-				print $data["host_id"].";".$data["service_id"].";".$this->decode($data["host_name"]).";".html_entity_decode($this->decode($data["service_description"]), ENT_QUOTES).";".html_entity_decode($this->decode($data["command_name"]), ENT_QUOTES).";".html_entity_decode($this->decode($data["command_command_id_arg"]), ENT_QUOTES).";".$this->decode($data["timeperiod_tp_id"]).";".$data["service_max_check_attempts"].";".$data["service_normal_check_interval"].";".$data["service_retry_check_interval"].";".$this->flag[$data["service_active_checks_enabled"]].";".$this->flag[$data["service_passive_checks_enabled"]]."\n";
+				print $data["host_id"].";".$data["service_id"].";".$this->decode($data["host_name"]).";".html_entity_decode($this->decode($data["service_description"]), ENT_QUOTES).";".$data["service_template_model_stm_id"].";".html_entity_decode($this->decode($data["command_name"]), ENT_QUOTES).";".html_entity_decode($this->decode($data["command_command_id_arg"]), ENT_QUOTES).";".$this->decode($data["timeperiod_tp_id"]).";".$data["service_max_check_attempts"].";".$data["service_normal_check_interval"].";".$data["service_retry_check_interval"].";".$this->flag[$data["service_active_checks_enabled"]].";".$this->flag[$data["service_passive_checks_enabled"]]."\n";
 			}
 			$DBRESULT->free();
 		} else {
