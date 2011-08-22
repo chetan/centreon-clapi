@@ -304,7 +304,7 @@ class CentreonService {
 
 	protected function encode($str) {
 		global $version;
-		
+
 		if (!strncmp($version, "2.1", 3)) {
 			$str = str_replace("/", "#S#", $str);
 			$str = str_replace("\\", "#BS#", $str);
@@ -314,7 +314,7 @@ class CentreonService {
 
 	protected function decode($str) {
 		global $version;
-		
+
 		if (!strncmp($version, "2.1", 3)) {
 			$str = str_replace("#S#", "/", $str);
 			$str = str_replace("#BS#", "\\", $str);
@@ -568,11 +568,11 @@ class CentreonService {
 			}
 			/*
 			$request = "SELECT " .
-						" service_id, service_description, service_alias, s.command_command_id, ". 
+						" service_id, service_description, service_alias, s.command_command_id, ".
 					    " s.timeperiod_tp_id, service_max_check_attempts, service_normal_check_interval, " .
 						" service_retry_check_interval,service_active_checks_enabled, service_passive_checks_enabled, " .
-						" s.command_command_id_arg, host_id, host_name " . 
-						
+						" s.command_command_id_arg, host_id, host_name " .
+
 						" FROM service s" .
 						" JOIN (SELECT hsr.service_service_id FROM host_service_relation hsr" .
 						" JOIN host h" .
@@ -589,14 +589,14 @@ class CentreonService {
 						" WHERE s.service_description = '".$svc_desc."' LIMIT 1";
 			*/
 			$request =  " SELECT " .
-					    " service_id, service_description, service_alias, s.command_command_id, ". 
+					    " service_id, service_description, service_alias, s.command_command_id, ".
 					    " s.timeperiod_tp_id, service_max_check_attempts, service_normal_check_interval, " .
 						" service_retry_check_interval,service_active_checks_enabled, service_passive_checks_enabled, " .
-						" s.command_command_id_arg, host_id, host_name " . 
+						" s.command_command_id_arg, host_id, host_name " .
 						" FROM service s, host h, host_service_relation hr ".
-						" WHERE s.service_id = hr.service_service_id " . 
+						" WHERE s.service_id = hr.service_service_id " .
 						" AND hr.host_host_id = h.host_id ".
-						" AND service_register = '".$this->register."' ". 
+						" AND service_register = '".$this->register."' ".
 						" AND host_register = '1' $search ".
 						" ORDER BY host_name, service_description";
 			$DBRESULT = $this->DB->query($request);
@@ -805,7 +805,7 @@ class CentreonService {
 		}
 
 		$info = split(";", $informations);
-		
+
 		if ($this->register) {
 			$return_code = $this->setParamService($info[0], $info[1], $info[2], $info[3]);
 		} else {
@@ -895,7 +895,7 @@ class CentreonService {
 		}
 
 		print $contact_id;
-		
+
 		/*
 		 * Check contact IS
 		 */
