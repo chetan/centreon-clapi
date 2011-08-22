@@ -822,7 +822,8 @@ class CentreonService {
 					$value = $this->getServiceTplID($value);
 				}
 
-				if ($param == "command") {
+        if ($param == "command" && !preg_match("/^[0-9]*$/", $value, $matches)) {
+          # lookup ID only if not a numeric value already
 					require_once "./class/centreonCommand.class.php";
 					$cmd = new CentreonCommand($this->DB);
 					$value = $cmd->getCommandID($value);
