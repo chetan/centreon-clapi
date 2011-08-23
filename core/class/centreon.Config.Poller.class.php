@@ -37,7 +37,7 @@
  */
 
 /**
- * 
+ *
  * @author Julien Mathis
  *
  */
@@ -61,7 +61,8 @@ class CentreonConfigPoller {
 		$this->nagiosCFGPath = "$centreon_path/filesGeneration/nagiosCFG/";
 		$this->centreon_path = $centreon_path;
 		$this->resultTest = array("warning" => 0, "errors" => 0);
-		$this->centcore_pipe = "@CENTREON_VARLIB@/centcore.cmd";
+    $this->centcore_pipe = "@CENTREON_VARLIB@/centcore.cmd";
+    $this->getOptGen();
 	}
 
 	/**
@@ -216,7 +217,7 @@ class CentreonConfigPoller {
 		 * Launch test command
 		 */
 		exec(escapeshellcmd("sudo ".$nagios_bin["nagios_bin"] . " -v ".$this->nagiosCFGPath.$variables."/nagiosCFG.DEBUG"), $lines, $return_code);
-		
+
 		$msg_debug = "";
 		foreach ($lines as $line) {
 			if (strncmp($line, "Processing object config file", strlen("Processing object config file"))
@@ -254,7 +255,11 @@ class CentreonConfigPoller {
 			print "OK: Nagios Poller $variables can restart without problem...\n";
 		}
 		return $return_code;
-	}
+  }
+
+  private function useOreon() {
+    return file_exists($this->centreon_path."/www/class/Oreon.class.php");
+  }
 
 	/**
 	 *
@@ -282,7 +287,7 @@ class CentreonConfigPoller {
 		/**
 		 * Init environnement
 		 */
-		if (strncmp($this->optGen["version"], "2.1", 3)) {
+		if (!$self->useOreon()) {
 			require_once $this->centreon_path."/www/class/centreon.class.php";
 		} else {
 			require_once $this->centreon_path."/www/class/Oreon.class.php";
@@ -300,7 +305,7 @@ class CentreonConfigPoller {
 
 		$CentreonLog = new CentreonUserLog(-1, $pearDB);
 		$centreonAuth = new CentreonAuth($login, $password, 0, $this->_DB, $CentreonLog, NULL);
-		if (strncmp($this->optGen["version"], "2.1", 3)) {
+		if (!$self->useOreon()) {
 			$oreon = new Centreon((array)$centreonAuth->userInfos);
 			$oreon->user->version = 3;
 		} else {
@@ -405,7 +410,7 @@ class CentreonConfigPoller {
 		}
 
 		$return = 0;
-		
+
 		/**
 		 * Check poller existance
 		 */
