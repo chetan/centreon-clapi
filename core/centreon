@@ -37,13 +37,23 @@
  *
  */
 	$debug = 0;
-	
+
 	ini_set("display_errors", "Off");
+
+  # quick pre-flight check
+  $basedir = dirname(__FILE__);
+  $cmd = "grep -r @CENTREON $basedir/../ | grep -v core/centreon";
+  $ret = trim(`$cmd | wc -l`);
+  if ($ret !== "0") {
+    print "error: please fix @CENTREON variables in the following files:\n";
+    system($cmd);
+    exit;
+  }
 
 	global $version;
 
 	/**
-	 * Declare Options 
+	 * Declare Options
 	 */
 	$shortopts  = "";
 	$shortopts .= "u:"; /** Users */
@@ -56,12 +66,12 @@
 	$shortopts .= "a:"; /** Action */
 	$shortopts .= "i:"; /** Import Massive data */
 	$shortopts .= "e"; /** Export all configuration */
-	
+
 	$options = getopt($shortopts);
 	if ($debug) {
 		print_r($options);
 	}
-	
+
 	if (!file_exists("../etc/api.conf.php")) {
 		chdir(dirname(__FILE__));
 	}
@@ -81,7 +91,7 @@
 
 	if (isset($options["V"])) {
 		$api->printVersion();
-		exit(0);		
+		exit(0);
 	}
 
 	/**
@@ -95,7 +105,7 @@
 				$handle = @fopen($_SERVER["HOME"]."/.centreonApi", "r");
 				if ($handle) {
 					/**
-					 * Read Only the first line 
+					 * Read Only the first line
 					 */
 					$str = fgets($handle);
 					fclose($handle);
@@ -114,11 +124,11 @@
 	 	   $api->printHelp();
 		}
 	} else {
-	  	
+
 	  	if (!isset($api->options["V"]) && !isset($api->options["h"])) {
 			$api->checkUser();
 		}
-		
+
 		/*
 		 * Check action to do
 		 */
