@@ -287,7 +287,7 @@ class CentreonConfigPoller {
 		/**
 		 * Init environnement
 		 */
-		if (!$self->useOreon()) {
+		if (!$this->useOreon()) {
 			require_once $this->centreon_path."/www/class/centreon.class.php";
 		} else {
 			require_once $this->centreon_path."/www/class/Oreon.class.php";
@@ -305,7 +305,7 @@ class CentreonConfigPoller {
 
 		$CentreonLog = new CentreonUserLog(-1, $pearDB);
 		$centreonAuth = new CentreonAuth($login, $password, 0, $this->_DB, $CentreonLog, NULL);
-		if (!$self->useOreon()) {
+		if (!$this->useOreon()) {
 			$oreon = new Centreon((array)$centreonAuth->userInfos);
 			$oreon->user->version = 3;
 		} else {
